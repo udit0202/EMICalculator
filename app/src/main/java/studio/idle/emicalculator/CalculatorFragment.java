@@ -3,9 +3,11 @@ package studio.idle.emicalculator;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.text.NumberFormat;
 
 import studio.idle.emicalculator.common.CommonConstants;
 import studio.idle.emicalculator.common.EMIHelper;
@@ -25,7 +29,9 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
     View calculatorView;
     EditText amountET, interestET, downPaymentET, tenureET;
-    Long principalAmount, downPayment, emiRounded, totalAmountPayable, totalInterest ;
+    TextView resultHeadingTV;
+
+    Long principalAmount, downPayment, emiRounded, totalAmountPayable, totalInterest;
     Double emi;
     float interestRate;
     int tenure;
@@ -44,9 +50,14 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         downPaymentET = (EditText) calculatorView.findViewById(R.id.downPayment);
         tenureET = (EditText) calculatorView.findViewById(R.id.tenure);
 
+        resultHeadingTV = (TextView) calculatorView.findViewById(R.id.resultHeading);
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getResources().getAssets(), "fonts/girls.ttf");
+        resultHeadingTV.setTypeface(custom_font);
+
         resetButton.setOnClickListener(this);
         calculateButton.setOnClickListener(this);
         shareButton.setOnClickListener(this);
+
         tenureRadio.setOnCheckedChangeListener(this);
 
         amountET.addTextChangedListener(this);
@@ -57,26 +68,18 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         return calculatorView;
     }
 
-    public void hideKeyboard() {
-        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        // check if no view has focus:
-        View view = getActivity().getCurrentFocus();
-        if (view != null) {
-            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
     public void resetFields() {
         amountET.setText(null);
         interestET.setText(null);
         downPaymentET.setText(null);
         tenureET.setText(null);
+
         amountET.setError(null);
         interestET.setError(null);
         downPaymentET.setError(null);
         tenureET.setError(null);
-        calculatorView.findViewById(R.id.resultLayout).setVisibility(View.INVISIBLE);
-        calculatorView.findViewById(R.id.resultHeading).setVisibility(View.INVISIBLE);
+
+        hideResultLayout();
     }
 
     public void shareResults() {
@@ -87,88 +90,125 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         startActivity(sendIntent);
     }
 
+    public void hideResultLayout() {
+        calculatorView.findViewById(R.id.resultLayout).setVisibility(View.INVISIBLE);
+        calculatorView.findViewById(R.id.resultHeading).setVisibility(View.INVISIBLE);
+        calculatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.main_background_color);
+    }
+
+    public void showResultLayout() {
+        calculatorView.findViewById(R.id.resultHeading).setVisibility(View.VISIBLE);
+        calculatorView.findViewById(R.id.resultLayout).setVisibility(View.VISIBLE);
+        calculatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.main_background_post_color);
+    }
+
     public void calculateEMI() {
-            hideKeyboard();
 
-            if(validateInputs(amountET, interestET, downPaymentET, tenureET)) {
-                principalAmount = Long.parseLong(amountET.getText().toString());
-                interestRate = Float.parseFloat(interestET.getText().toString());
+        EMIHelper.hideKeyboard(getActivity());
 
-                if(!("").equals(downPaymentET.getText().toString())) {
-                    downPayment = Long.parseLong(downPaymentET.getText().toString());
-                    } else {
-                        downPayment = 0L;
-                }
+        if (validateInputs(amountET, interestET, downPaymentET, tenureET)) {
+            principalAmount = Long.parseLong(amountET.getText().toString());
+            interestRate = Float.parseFloat(interestET.getText().toString());
 
-                tenure = Integer.parseInt(tenureET.getText().toString());
-                if (!isTenureInMonths) {
-                    tenure *= 12;
-                }
+            tenure = Integer.parseInt(tenureET.getText().toString());
+            if (!isTenureInMonths) {
+                tenure *= 12;
+            }
 
-                emi = EMIHelper.calculateEMI(principalAmount, interestRate, downPayment, tenure);
-                emiRounded = Math.round(emi);
-                totalAmountPayable = Math.round(emi * tenure);
-                totalInterest = totalAmountPayable - ( principalAmount - downPayment);
+            if (!("").equals(downPaymentET.getText().toString())) {
+                downPayment = Long.parseLong(downPaymentET.getText().toString());
+            } else {
+                downPayment = 0L;
+            }
 
-                TextView monthlyInstallmentTV = (TextView) calculatorView.findViewById(R.id.monthlyInstallment);
-                TextView totalInterestTV = (TextView) calculatorView.findViewById(R.id.totalInterest);
-                TextView totalAmountTV = (TextView) calculatorView.findViewById(R.id.totalAmountPayable);
+            emi = EMIHelper.calculateEMI(principalAmount, interestRate, downPayment, tenure);
+            emiRounded = Math.round(emi);
+            totalAmountPayable = Math.round(emi * tenure);
+            totalInterest = totalAmountPayable - (principalAmount - downPayment);
 
-                monthlyInstallmentTV.setText(emiRounded.toString());
-                totalAmountTV.setText(totalAmountPayable.toString());
-                totalInterestTV.setText(totalInterest.toString());
+            TextView monthlyInstallmentTV = (TextView) calculatorView.findViewById(R.id.monthlyInstallment);
+            TextView totalInterestTV = (TextView) calculatorView.findViewById(R.id.totalInterest);
+            TextView totalAmountTV = (TextView) calculatorView.findViewById(R.id.totalAmountPayable);
 
-                calculatorView.findViewById(R.id.resultHeading).setVisibility(View.VISIBLE);
-                calculatorView.findViewById(R.id.resultLayout).setVisibility(View.VISIBLE);
-                calculatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.darkgrey);
+            NumberFormat currencyFormatter = NumberFormat.getNumberInstance();
+            monthlyInstallmentTV.setText(currencyFormatter.format(emiRounded));
+            totalAmountTV.setText(currencyFormatter.format(totalAmountPayable));
+            totalInterestTV.setText(currencyFormatter.format(totalInterest));
+
+            showResultLayout();
+        } else {
+            hideResultLayout();
         }
     }
 
-    public boolean validateInputs(EditText amountET, EditText rateET, EditText downPayment, EditText tenure) {
+    public boolean validateInputs(EditText amountET, EditText rateET, EditText downPaymentET, EditText tenure) {
         boolean valid = true;
         String alertMessage = "";
-        Long zeroValue = 0L;
 
-        if (amountET.getText().toString().equals("")) {
-            valid = false;
-            alertMessage = alertMessage.concat(CommonConstants.PRINCIPAL_AMOUNT);
-        }
-        if (rateET.getText().toString().equals("")) {
-            if (!valid)
-                alertMessage = alertMessage.concat(", ").concat(CommonConstants.INTEREST_RATE);
-            else {
-                valid = false;
-                alertMessage = CommonConstants.INTEREST_RATE;
-            }
-        }
-        if(tenure.getText().toString().equals("")){
-            if (!valid)
-                alertMessage = alertMessage.concat(", ").concat(CommonConstants.TENURE);
-            else {
-                valid = false;
-                alertMessage = CommonConstants.TENURE;
-            }
-        }
-        if (!valid) {
+        if (amountET.getError() != null || rateET.getError() != null || downPaymentET.getError() != null || tenure.getError() != null) {
             ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-            dialogFragment.setMessage(alertMessage);
+            dialogFragment.setMessage("Please correct Errors");
+            dialogFragment.setTitle("Invalid Inputs");
             dialogFragment.show(getFragmentManager(), "MyDialog");
+            valid = false;
+        }
+        else {
+            if (amountET.getText().toString().equals("")) {
+                valid = false;
+                alertMessage = alertMessage.concat(CommonConstants.PRINCIPAL_AMOUNT);
+            }
+            if (rateET.getText().toString().equals("")) {
+                if (!valid)
+                    alertMessage = alertMessage.concat(", ").concat(CommonConstants.INTEREST_RATE);
+                else {
+                    valid = false;
+                    alertMessage = CommonConstants.INTEREST_RATE;
+                }
+            }
+            if (tenure.getText().toString().equals("")) {
+                if (!valid)
+                    alertMessage = alertMessage.concat(", ").concat(CommonConstants.TENURE);
+                else {
+                    valid = false;
+                    alertMessage = CommonConstants.TENURE;
+                }
+            }
+            if (!valid) {
+                ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
+                dialogFragment.setMessage(alertMessage);
+                dialogFragment.setTitle("Please provide following inputs");
+                dialogFragment.show(getFragmentManager(), "MyDialog");
+            } else if (!downPaymentET.getText().toString().equals("")) {
+                downPayment = Long.parseLong(downPaymentET.getText().toString());
+                if (downPayment >= Long.parseLong(amountET.getText().toString())) {
+                    ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
+                    dialogFragment.setMessage("Down payment amount cannot be more than or equal to loan amount");
+                    dialogFragment.setTitle("Invalid Input");
+                    dialogFragment.show(getFragmentManager(), "MyDialog");
+                    valid = false;
+                }
+            }
         }
         return valid;
     }
 
+    //OnClickListener
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.resetButton : resetFields();
+            case R.id.resetButton:
+                resetFields();
                 break;
-            case R.id.calculateButton : calculateEMI();
+            case R.id.calculateButton:
+                calculateEMI();
                 break;
-            case R.id.shareButton : shareResults();
+            case R.id.shareButton:
+                shareResults();
         }
     }
 
+    //TextWatcher
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
     }
@@ -195,7 +235,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     private void validateInterestRate(Editable text) {
         if (!text.toString().equals("")) {
             Float interestRate = Float.parseFloat(text.toString());
-            if(interestRate == 0F){
+            if (interestRate == 0F) {
                 interestET.setError("Enter rate % > 0");
             } else if (interestRate > 100F) {
                 interestET.setError("Enter rate % < 100");
@@ -208,30 +248,29 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     }
 
     private void validateDownPayment(Editable text) {
-        if (!text.toString().equals("")) {
-            if (text.toString().length() > 20) {
+        if (!text.toString().equals("") && text.toString().length() > 15) {
                 downPaymentET.setError("Down Payment too Large");
-            } else if (Long.parseLong(text.toString()) > Long.parseLong(amountET.getText().toString())) {
-                downPaymentET.setError("Cannot be more than principal");
-            }
-            else {
-                downPaymentET.setError(null);
-            }
         } else {
             downPaymentET.setError(null);
         }
     }
 
     private void validateTenure(Editable text) {
+        int validPeriod = 100; //years
+        if(isTenureInMonths) {
+            validPeriod = validPeriod * 12;
+        }
+
+        if (!text.toString().equals("") && Integer.parseInt(text.toString()) > validPeriod) {
+            tenureET.setError("Invalid tenure period, enter smaller period");
+        } else {
+            tenureET.setError(null);
+        }
     }
 
     private void validateAmount(Editable text) {
-        if (!text.toString().equals("")) {
-            if (text.toString().length() > 15) {
-                amountET.setError("Amount too Large");
-            } else {
-                amountET.setError(null);
-            }
+        if (!text.toString().equals("") && text.toString().length() > 15) {
+            amountET.setError("Amount too Large");
         } else {
             amountET.setError(null);
         }
@@ -240,10 +279,10 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         switch (i) {
-            case R.id.tenure_months :
+            case R.id.tenure_months:
                 isTenureInMonths = true;
                 break;
-            case R.id.tenure_years :
+            case R.id.tenure_years:
                 isTenureInMonths = false;
         }
     }

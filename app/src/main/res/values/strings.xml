@@ -4,5 +4,9 @@
     <string name="app_name">EMI Calculator</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="tenure_array">
+        <item>Months</item>
+        <item>Years</item>
+    </string-array>
 
 </resources>

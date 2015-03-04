@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:orientation="vertical"
     android:weightSum="21"
-    android:background="#ffe1e1e1">
+    android:background="@color/main_background_color">
 
     <LinearLayout
+        android:id="@+id/topView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="11.5"
-        android:background="@drawable/topview"
-        android:paddingTop="10dp"
+        android:layout_weight="11"
+        android:background="@drawable/box_view"
+        android:paddingTop="4dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:orientation="vertical"
         android:weightSum="5">
         <EditText
@@ -32,35 +35,30 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="Interest-Rate/Year (%)"
-            android:inputType="numberDecimal"/>
-        <EditText
-            android:id="@+id/downPayment"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:hint="Down Payment (Optional)"
+            android:hint="Interest Rate (%)"
             android:inputType="numberDecimal"/>
 
         <LinearLayout
+            android:id="@+id/tenureLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:layout_marginTop="-5dp"
             android:weightSum="2"
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/tenure"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.9"
                 android:layout_height="match_parent"
                 android:hint="Tenure"
                 android:inputType="number"/>
             <RadioGroup
                 android:id="@+id/tenureRadioGroup"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
                 <RadioButton
                     android:id="@+id/tenure_months"
@@ -76,13 +74,20 @@
             </RadioGroup>
         </LinearLayout>
 
+        <EditText
+            android:id="@+id/downPayment"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:hint="Down Payment (Optional)"
+            android:inputType="numberDecimal"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
             android:orientation="horizontal"
             android:weightSum="4">
             <Button
@@ -92,14 +97,14 @@
                 android:layout_weight="2"
                 android:layout_marginTop="14dp"
                 android:layout_marginLeft="5dp"
-                android:layout_toLeftOf="@+id/centerPoint"
                 android:background="@drawable/calculate_button"
                 android:text="Reset"
                 android:textSize="13dp"
-                android:onClick="resetFields"/>
+                android:onClick="resetFields"
+                android:fontFamily="sans-serif"/>
             <TextView
                 android:id="@+id/centerPoint"
-                android:layout_width="3dip"
+                android:layout_width="5dip"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="" />
@@ -109,14 +114,14 @@
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_marginTop="14dp"
-                android:layout_marginRight="5dp"
-                android:layout_toRightOf="@+id/centerPoint"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/calculate_button"
                 android:text="Calculate"
                 android:textSize="13dp"
                 android:onClick="calculateEMI"
                 android:fontFamily="sans-serif"/>
         </LinearLayout>
+
     </LinearLayout>
 
     <TextView
@@ -126,8 +131,9 @@
         android:layout_weight="1"
         android:layout_marginTop="0dp"
         android:gravity="center"
-        android:text="EMI Calculation"
-        android:fontFamily="sans-serif"
+        android:text="EMI  Calculation"
+        android:textSize="16dp"
+        android:textColor="#151B54"
         android:textStyle="bold"
         android:visibility="invisible"/>
 
@@ -135,10 +141,11 @@
         android:id="@+id/resultLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8.5"
-        android:background="@drawable/topview"
+        android:layout_weight="9"
+        android:background="@drawable/box_view"
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:orientation="vertical"
         android:weightSum="7.5"
         android:visibility="invisible">
@@ -221,11 +228,9 @@
             android:layout_height="0dp"
             android:layout_weight="1.5"
             android:layout_gravity="center"
-            android:layout_marginLeft="-25dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/calculate_button"
-            android:textSize="12dp"
+            android:textSize="13dp"
             android:text="Share Result"/>
     </LinearLayout>
 

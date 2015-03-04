@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,10 +20,12 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        Fragment fragment = new CalculatorFragment();
+        fragment.setRetainInstance(true);
         ActionBar.Tab tabFirst = actionBar.
                 newTab().
                 setText("Calculate EMI").
-                setTabListener(new MyTabListener(new CalculatorFragment()));
+                setTabListener(new MyTabListener(fragment));
 
         ActionBar.Tab tabSecond = actionBar.
                 newTab().
@@ -64,7 +67,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-            fragmentTransaction.replace(R.id.fragment_container,fragment);
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
         }
 
         @Override

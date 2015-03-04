@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="lightblue">#ff78c6ff</color>
     <color name="white">#ffffff</color>
-    <color name="darkblue">#1932B6</color>
-    <color name="darkgrey">#ffc6c6c6</color>
-
+    <color name="main_background_post_color">#ffedfdff</color>
+    <color name="main_background_color">#ffb4b4b4</color>
 </resources>

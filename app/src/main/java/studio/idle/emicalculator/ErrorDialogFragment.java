@@ -13,6 +13,16 @@ public class ErrorDialogFragment extends DialogFragment {
     Context mContext;
     private String message;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private String title;
+
     public String getMessage() {
         return message;
     }
@@ -25,7 +35,7 @@ public class ErrorDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mContext = getActivity();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-        alertDialogBuilder.setTitle("Please provide following inputs");
+        alertDialogBuilder.setTitle(getTitle());
         alertDialogBuilder.setMessage(getMessage());
         return alertDialogBuilder.create();
     }
