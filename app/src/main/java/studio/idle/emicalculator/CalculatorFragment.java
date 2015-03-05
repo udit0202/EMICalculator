@@ -1,17 +1,14 @@
 package studio.idle.emicalculator;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -51,7 +48,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         tenureET = (EditText) calculatorView.findViewById(R.id.tenure);
 
         resultHeadingTV = (TextView) calculatorView.findViewById(R.id.resultHeading);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getResources().getAssets(), "fonts/girls.ttf");
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getResources().getAssets(), "fonts/heading_font.ttf");
         resultHeadingTV.setTypeface(custom_font);
 
         resetButton.setOnClickListener(this);
@@ -69,16 +66,8 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     }
 
     public void resetFields() {
-        amountET.setText(null);
-        interestET.setText(null);
-        downPaymentET.setText(null);
-        tenureET.setText(null);
-
-        amountET.setError(null);
-        interestET.setError(null);
-        downPaymentET.setError(null);
-        tenureET.setError(null);
-
+        EMIHelper.resetFields(amountET, downPaymentET, tenureET, interestET);
+        EMIHelper.hideKeyboard(getActivity());
         hideResultLayout();
     }
 
@@ -109,17 +98,11 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         if (validateInputs(amountET, interestET, downPaymentET, tenureET)) {
             principalAmount = Long.parseLong(amountET.getText().toString());
             interestRate = Float.parseFloat(interestET.getText().toString());
-
             tenure = Integer.parseInt(tenureET.getText().toString());
-            if (!isTenureInMonths) {
-                tenure *= 12;
-            }
+            tenure = isTenureInMonths ? tenure : tenure * 12;
 
-            if (!("").equals(downPaymentET.getText().toString())) {
-                downPayment = Long.parseLong(downPaymentET.getText().toString());
-            } else {
-                downPayment = 0L;
-            }
+            downPayment = ("").equals(downPaymentET.getText().toString()) ? 0L :
+                    Long.parseLong(downPaymentET.getText().toString());
 
             emi = EMIHelper.calculateEMI(principalAmount, interestRate, downPayment, tenure);
             emiRounded = Math.round(emi);
@@ -147,43 +130,36 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
         if (amountET.getError() != null || rateET.getError() != null || downPaymentET.getError() != null || tenure.getError() != null) {
             ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-            dialogFragment.setMessage("Please correct Errors");
-            dialogFragment.setTitle("Invalid Inputs");
+            dialogFragment.setTitle(CommonConstants.ERROR_TITLE_INVALID);
+            dialogFragment.setMessage(CommonConstants.ERROR_MESSAGE_ERRORS_PRESENT);
             dialogFragment.show(getFragmentManager(), "MyDialog");
             valid = false;
-        }
-        else {
+        } else {
             if (amountET.getText().toString().equals("")) {
                 valid = false;
-                alertMessage = alertMessage.concat(CommonConstants.PRINCIPAL_AMOUNT);
+                alertMessage = alertMessage.concat(", ").concat(CommonConstants.PRINCIPAL_AMOUNT);
             }
             if (rateET.getText().toString().equals("")) {
-                if (!valid)
-                    alertMessage = alertMessage.concat(", ").concat(CommonConstants.INTEREST_RATE);
-                else {
-                    valid = false;
-                    alertMessage = CommonConstants.INTEREST_RATE;
-                }
+                alertMessage = alertMessage.concat(", ").concat(CommonConstants.INTEREST_RATE);
+                valid = false;
             }
             if (tenure.getText().toString().equals("")) {
-                if (!valid)
-                    alertMessage = alertMessage.concat(", ").concat(CommonConstants.TENURE);
-                else {
-                    valid = false;
-                    alertMessage = CommonConstants.TENURE;
-                }
+                alertMessage = alertMessage.concat(", ").concat(CommonConstants.TENURE);
+                valid = false;
             }
+
             if (!valid) {
+                alertMessage = EMIHelper.prettifyMessage(alertMessage);
                 ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
                 dialogFragment.setMessage(alertMessage);
-                dialogFragment.setTitle("Please provide following inputs");
+                dialogFragment.setTitle(CommonConstants.ERROR_TITLE_MISSING_INPUT);
                 dialogFragment.show(getFragmentManager(), "MyDialog");
             } else if (!downPaymentET.getText().toString().equals("")) {
                 downPayment = Long.parseLong(downPaymentET.getText().toString());
                 if (downPayment >= Long.parseLong(amountET.getText().toString())) {
                     ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-                    dialogFragment.setMessage("Down payment amount cannot be more than or equal to loan amount");
-                    dialogFragment.setTitle("Invalid Input");
+                    dialogFragment.setMessage(CommonConstants.ERROR_MESSAGE_DOWNPAYMENT);
+                    dialogFragment.setTitle(CommonConstants.ERROR_TITLE_INVALID);
                     dialogFragment.show(getFragmentManager(), "MyDialog");
                     valid = false;
                 }
@@ -222,57 +198,13 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         int currentInputHashCode = editable.hashCode();
 
         if (currentInputHashCode == amountET.getText().hashCode()) {
-            validateAmount(amountET.getText());
+            EMIHelper.validateAmount(amountET);
         } else if (currentInputHashCode == interestET.getText().hashCode()) {
-            validateInterestRate(interestET.getText());
+            EMIHelper.validateInterestRate(interestET);
         } else if (currentInputHashCode == downPaymentET.getText().hashCode()) {
-            validateDownPayment(downPaymentET.getText());
+            EMIHelper.validateDownPayment(downPaymentET);
         } else if (currentInputHashCode == tenureET.getText().hashCode()) {
-            validateTenure(tenureET.getText());
-        }
-    }
-
-    private void validateInterestRate(Editable text) {
-        if (!text.toString().equals("")) {
-            Float interestRate = Float.parseFloat(text.toString());
-            if (interestRate == 0F) {
-                interestET.setError("Enter rate % > 0");
-            } else if (interestRate > 100F) {
-                interestET.setError("Enter rate % < 100");
-            } else {
-                interestET.setError(null);
-            }
-        } else {
-            interestET.setError(null);
-        }
-    }
-
-    private void validateDownPayment(Editable text) {
-        if (!text.toString().equals("") && text.toString().length() > 15) {
-                downPaymentET.setError("Down Payment too Large");
-        } else {
-            downPaymentET.setError(null);
-        }
-    }
-
-    private void validateTenure(Editable text) {
-        int validPeriod = 100; //years
-        if(isTenureInMonths) {
-            validPeriod = validPeriod * 12;
-        }
-
-        if (!text.toString().equals("") && Integer.parseInt(text.toString()) > validPeriod) {
-            tenureET.setError("Invalid tenure period, enter smaller period");
-        } else {
-            tenureET.setError(null);
-        }
-    }
-
-    private void validateAmount(Editable text) {
-        if (!text.toString().equals("") && text.toString().length() > 15) {
-            amountET.setError("Amount too Large");
-        } else {
-            amountET.setError(null);
+            EMIHelper.validateTenure(tenureET, isTenureInMonths);
         }
     }
 
@@ -286,5 +218,4 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
                 isTenureInMonths = false;
         }
     }
-
 }

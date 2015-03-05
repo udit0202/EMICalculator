@@ -3,13 +3,13 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_background_color"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:orientation="vertical"
-    android:weightSum="21"
-    android:background="@color/main_background_color">
+    android:weightSum="21">
 
     <LinearLayout
         android:id="@+id/topView"
@@ -17,109 +17,118 @@
         android:layout_height="0dp"
         android:layout_weight="11"
         android:background="@drawable/box_view"
-        android:paddingTop="4dp"
+        android:orientation="vertical"
         android:paddingBottom="0dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:orientation="vertical"
+        android:paddingTop="4dp"
         android:weightSum="5">
+
         <EditText
             android:id="@+id/amount"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:hint="Principal Amount"
-            android:inputType="number"/>
+            android:inputType="number" />
+
         <EditText
             android:id="@+id/rateOfInterest"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:hint="Interest Rate (%)"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal" />
 
         <LinearLayout
             android:id="@+id/tenureLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginTop="-5dp"
-            android:weightSum="2"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
             <EditText
                 android:id="@+id/tenure"
                 android:layout_width="0dp"
-                android:layout_weight="0.9"
                 android:layout_height="match_parent"
+                android:layout_weight="0.9"
                 android:hint="Tenure"
-                android:inputType="number"/>
+                android:inputType="number" />
+
             <RadioGroup
                 android:id="@+id/tenureRadioGroup"
                 android:layout_width="0dp"
-                android:layout_weight="1.1"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
+                android:layout_weight="1.1"
                 android:orientation="horizontal">
+
                 <RadioButton
                     android:id="@+id/tenure_months"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Months"/>
+                    android:text="Months" />
+
                 <RadioButton
                     android:id="@+id/tenure_years"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Years"/>
+                    android:text="Years" />
             </RadioGroup>
         </LinearLayout>
 
         <EditText
             android:id="@+id/downPayment"
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="0dp"
+            android:layout_weight="1"
             android:hint="Down Payment (Optional)"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
             android:orientation="horizontal"
             android:weightSum="4">
+
             <Button
                 android:id="@+id/resetButton"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_marginTop="14dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:background="@drawable/calculate_button"
-                android:text="Reset"
-                android:textSize="13dp"
+                android:layout_marginTop="14dp"
+                android:layout_weight="2"
+                android:background="@drawable/button_design"
+                android:fontFamily="sans-serif"
                 android:onClick="resetFields"
-                android:fontFamily="sans-serif"/>
+                android:text="Reset"
+                android:textSize="13dp" />
+
             <TextView
                 android:id="@+id/centerPoint"
                 android:layout_width="5dip"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="" />
+
             <Button
                 android:id="@+id/calculateButton"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_marginTop="14dp"
+                android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
-                android:background="@drawable/calculate_button"
-                android:text="Calculate"
-                android:textSize="13dp"
+                android:layout_marginTop="14dp"
+                android:layout_weight="2"
+                android:background="@drawable/button_design"
+                android:fontFamily="sans-serif"
                 android:onClick="calculateEMI"
-                android:fontFamily="sans-serif"/>
+                android:text="Calculate"
+                android:textSize="13dp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -128,14 +137,14 @@
         android:id="@+id/resultHeading"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginTop="0dp"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="EMI  Calculation"
-        android:textSize="16dp"
         android:textColor="#151B54"
+        android:textSize="16dp"
         android:textStyle="bold"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <LinearLayout
         android:id="@+id/resultLayout"
@@ -143,35 +152,37 @@
         android:layout_height="0dp"
         android:layout_weight="9"
         android:background="@drawable/box_view"
-        android:paddingTop="20dp"
+        android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:orientation="vertical"
-        android:weightSum="7.5"
-        android:visibility="invisible">
+        android:paddingTop="20dp"
+        android:visibility="invisible"
+        android:weightSum="7.5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif"
-                android:text="Monthly Installment (EMI)"
-                android:textSize="12dp"/>
+                android:text="Monthly Installment"
+                android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/monthlyInstallment"
                 android:layout_width="0dp"
-                android:layout_weight="0.9"
-                android:layout_marginLeft="50dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif"
-                android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -179,23 +190,25 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif"
                 android:text="Total Interest"
-                android:textSize="12dp"/>
+                android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/totalInterest"
                 android:layout_width="0dp"
-                android:layout_weight="0.9"
-                android:layout_marginLeft="50dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif"
                 android:textColor="#ff616161"
-                android:textStyle="bold"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -203,35 +216,38 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif"
                 android:text="Total Amount Payable"
-                android:textSize="12dp"/>
+                android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/totalAmountPayable"
                 android:layout_width="0dp"
-                android:layout_weight="0.9"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="50dp"
+                android:layout_weight="1"
                 android:fontFamily="sans-serif"
                 android:textColor="#ff616161"
-                android:textStyle="bold"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <Button
             android:id="@+id/shareButton"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/calculate_button"
-            android:textSize="13dp"
-            android:text="Share Result"/>
+            android:layout_weight="1.5"
+            android:background="@drawable/button_design"
+            android:text="Share Result"
+            android:textSize="13dp" />
+
     </LinearLayout>
 
 </LinearLayout>

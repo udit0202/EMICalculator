@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,7 +20,6 @@ public class MainActivity extends Activity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         Fragment fragment = new CalculatorFragment();
-        fragment.setRetainInstance(true);
         ActionBar.Tab tabFirst = actionBar.
                 newTab().
                 setText("Calculate EMI").
@@ -46,14 +44,18 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch(item.getItemId()) {
+            case R.id.about_us :
+                showAboutActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);                
         }
-        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void showAboutActivity() {
     }
 
 

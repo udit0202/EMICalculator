@@ -12,6 +12,7 @@ import android.os.Bundle;
 public class ErrorDialogFragment extends DialogFragment {
     Context mContext;
     private String message;
+    private String title;
 
     public String getTitle() {
         return title;
@@ -20,8 +21,6 @@ public class ErrorDialogFragment extends DialogFragment {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    private String title;
 
     public String getMessage() {
         return message;
