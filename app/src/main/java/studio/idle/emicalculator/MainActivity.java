@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,20 +20,18 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        Fragment fragment = new CalculatorFragment();
         ActionBar.Tab tabFirst = actionBar.
                 newTab().
                 setText("Calculate EMI").
-                setTabListener(new MyTabListener(fragment));
+                setTabListener(new MyTabListener(new CalculatorFragment()));
 
         ActionBar.Tab tabSecond = actionBar.
                 newTab().
-                setText("Compare EMI").
+                setText("Compare Loans").
                 setTabListener(new MyTabListener(new ComparatorFragment()));
 
         actionBar.addTab(tabFirst);
         actionBar.addTab(tabSecond);
-
     }
 
     @Override
@@ -44,18 +43,18 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()) {
-            case R.id.about_us :
+        switch (item.getItemId()) {
+            case R.id.about_us:
                 showAboutActivity();
                 return true;
             default:
-                return super.onOptionsItemSelected(item);                
+                return super.onOptionsItemSelected(item);
         }
-
     }
 
     private void showAboutActivity() {
+        Intent intent = new Intent(this, AboutUsActivity.class);
+        startActivity(intent);
     }
 
 
@@ -69,7 +68,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
         }
 
         @Override
@@ -82,5 +81,4 @@ public class MainActivity extends Activity {
 
         }
     }
-
 }
