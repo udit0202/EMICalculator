@@ -64,24 +64,21 @@
                 android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif"
-                android:text="Principal Amount"
-                android:textSize="12dp"/>
+                android:text="Principal Amount" />
             <EditText
                 android:id="@+id/amount1"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:inputType="number"
-                android:textSize="13dp"/>
+                android:inputType="number"/>
             <EditText
                 android:id="@+id/amount2"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:gravity="center"
-                android:inputType="number"
-                android:textSize="13dp"/>
+                android:inputType="number"/>
         </LinearLayout>
 
         <LinearLayout
@@ -98,24 +95,21 @@
                 android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif"
-                android:text="Interest Rate (%)"
-                android:textSize="12dp"/>
+                android:text="Interest Rate (%)" />
             <EditText
                 android:id="@+id/interestRate1"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal"
-                android:textSize="13dp"/>
+                android:inputType="numberDecimal"/>
             <EditText
                 android:id="@+id/interestRate2"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal"
-                android:textSize="13dp"/>
+                android:inputType="numberDecimal"/>
         </LinearLayout>
 
         <LinearLayout
@@ -133,16 +127,15 @@
                 android:layout_marginLeft="5dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
-                android:text="Tenure"
-                android:textSize="12dp"/>
+                android:text="Tenure" />
             <Spinner
                 android:id="@+id/tenureSpinner"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="0.6"
                 android:gravity="left|center_vertical"
-                android:layout_marginTop="12.5dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="12dp"
                 android:spinnerMode="dropdown"
                 android:background="@drawable/dropdown_background">
             </Spinner>
@@ -152,16 +145,14 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="number"
-                android:textSize="13dp"/>
+                android:inputType="number"/>
             <EditText
                 android:id="@+id/tenure2"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="number"
-                android:textSize="13dp"/>
+                android:inputType="number"/>
         </LinearLayout>
 
         <LinearLayout
@@ -178,24 +169,21 @@
                 android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif"
-                android:text="Down payment (Optional)"
-                android:textSize="12dp"/>
+                android:text="Down payment (Optional)"/>
             <EditText
                 android:id="@+id/downPayment1"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="number"
-                android:textSize="13dp"/>
+                android:inputType="number"/>
             <EditText
                 android:id="@+id/downPayment2"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="number"
-                android:textSize="13dp"/>
+                android:inputType="number"/>
         </LinearLayout>
 
         <LinearLayout
@@ -236,7 +224,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:gravity="center"
-        android:textSize="14dp"
+        android:textSize="16dp"
         android:textColor="#151B54"
         android:textStyle="bold"
         android:text="Loan Comparison"
@@ -278,7 +266,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="9dp"/>
+                android:textSize="11dp"/>
             <TextView
                 android:id="@+id/monthlyInstallment2"
                 android:layout_height="match_parent"
@@ -289,7 +277,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="9dp"/>
+                android:textSize="11dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -316,7 +304,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="9dp"/>
+                android:textSize="11dp"/>
             <TextView
                 android:id="@+id/totalInterest2"
                 android:layout_height="match_parent"
@@ -327,7 +315,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="9dp"/>
+                android:textSize="11dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -354,7 +342,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="9dp"/>
+                android:textSize="11dp"/>
             <TextView
                 android:id="@+id/totalAmount2"
                 android:layout_height="match_parent"
@@ -365,7 +353,7 @@
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#ff616161"
-                android:textSize="9dp"/>
+                android:textSize="11dp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -399,7 +387,7 @@
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textColor="#ff616161"
-            android:textSize="11dp"/>
+            android:textSize="12dp"/>
     </LinearLayout>
 
 </LinearLayout>
