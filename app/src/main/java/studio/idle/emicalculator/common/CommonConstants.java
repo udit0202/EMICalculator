@@ -18,5 +18,5 @@ public class CommonConstants {
     public static final String ERROR_MESSAGE_ERRORS_PRESENT = "Please correct errors first";
     public static final String ERROR_MESSAGE_DOWNPAYMENT = "Down payment amount cannot be more than or equal to loan amount";
 
-    public static final int MAX_DIGITS_AMOUNT = 12;
+    public static final Long MAX_AMOUNT_VALUE = 99999999999L;
 }

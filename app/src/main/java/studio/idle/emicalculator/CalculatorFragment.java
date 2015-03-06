@@ -6,11 +6,13 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     View calculatorView;
     EditText amountET, interestET, downPaymentET, tenureET;
     TextView resultHeadingTV;
-
+    RadioGroup tenureRadio;
     Long principalAmount, downPayment, emiRounded, totalAmountPayable, totalInterest;
     Double emi;
     float interestRate;
@@ -40,7 +42,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         Button resetButton = (Button) calculatorView.findViewById(R.id.resetButton);
         Button calculateButton = (Button) calculatorView.findViewById(R.id.calculateButton);
         Button shareButton = (Button) calculatorView.findViewById(R.id.shareButton);
-        RadioGroup tenureRadio = (RadioGroup) calculatorView.findViewById(R.id.tenureRadioGroup);
+        tenureRadio = (RadioGroup) calculatorView.findViewById(R.id.tenureRadioGroup);
 
         amountET = (EditText) calculatorView.findViewById(R.id.amount);
         interestET = (EditText) calculatorView.findViewById(R.id.rateOfInterest);
@@ -67,6 +69,8 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
 
     public void resetFields() {
         EMIHelper.resetFields(amountET, downPaymentET, tenureET, interestET);
+        RadioButton b = (RadioButton) calculatorView.findViewById(R.id.tenure_months);
+        b.setChecked(true);
         EMIHelper.hideKeyboard(getActivity());
         hideResultLayout();
     }
@@ -211,11 +215,14 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         switch (i) {
-            case R.id.tenure_months:
+            case R.id.tenure_months :
                 isTenureInMonths = true;
+                EMIHelper.validateTenure(tenureET, isTenureInMonths);
                 break;
-            case R.id.tenure_years:
+            case R.id.tenure_years :
                 isTenureInMonths = false;
+                EMIHelper.validateTenure(tenureET,isTenureInMonths);
+
         }
     }
 }

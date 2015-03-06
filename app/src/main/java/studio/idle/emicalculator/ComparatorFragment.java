@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,8 @@ public class ComparatorFragment extends Fragment implements TextWatcher, View.On
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 isTenureInMonths = position == 0 ? true : false;
+                EMIHelper.validateTenure(tenureET1, isTenureInMonths);
+                EMIHelper.validateTenure(tenureET2, isTenureInMonths);
             }
 
             @Override

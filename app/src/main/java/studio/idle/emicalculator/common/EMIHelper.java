@@ -3,6 +3,7 @@ package studio.idle.emicalculator.common;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -14,9 +15,9 @@ import java.text.NumberFormat;
  */
 public  class EMIHelper {
 
-    public static Double calculateEMI(Long principalAmount, float rateOfInterest, Long downPayment, int tenureInMonths) {
-        Double emi = ((principalAmount - downPayment) * (rateOfInterest / (12 * 100))) * ((Math.pow((1 + (rateOfInterest / (12 * 100))), tenureInMonths))) /
-                ((Math.pow((1 + (rateOfInterest / (12 * 100))), tenureInMonths) - 1));
+    public static Double calculateEMI(Long principalAmount, double rateOfInterest, Long downPayment, double tenureInMonths) {
+        Double emi = (( (principalAmount - downPayment) * ( rateOfInterest / (12 * 100))) * ( (Math.pow((1 + (rateOfInterest / (12 * 100))), tenureInMonths))) ) /
+                ( ( Math.pow((1 + (rateOfInterest / (12 * 100))), tenureInMonths)) - 1);
         return emi;
     }
 
@@ -47,8 +48,10 @@ public  class EMIHelper {
     }
 
     public static void validateAmount(EditText editText) {
-        if (!editText.getText().toString().equals("") && editText.getText().toString().length() > CommonConstants.MAX_DIGITS_AMOUNT) {
+        if (!editText.getText().toString().equals("") && Long.parseLong(editText.getText().toString()) > CommonConstants.MAX_AMOUNT_VALUE) {
             editText.setError("Principal Amount too Large");
+        } else if (!editText.getText().toString().equals("") && Long.parseLong(editText.getText().toString()) == 0) {
+            editText.setError("Enter amount greater than zero");
         } else {
             editText.setError(null);
         }
@@ -58,9 +61,9 @@ public  class EMIHelper {
         if (!editText.getText().toString().equals("")) {
             Float interestRate = Float.parseFloat(editText.getText().toString());
             if (interestRate == 0F) {
-                editText.setError("Enter rate % > 0");
+                editText.setError("Enter rate % greater than 0");
             } else if (interestRate > 100F) {
-                editText.setError("Enter rate % < 100");
+                editText.setError("rate % can't be more than 100%");
             } else {
                 editText.setError(null);
             }
@@ -70,7 +73,7 @@ public  class EMIHelper {
     }
 
     public static void validateDownPayment(EditText editText) {
-        if (!editText.getText().toString().equals("") && editText.getText().toString().length() > CommonConstants.MAX_DIGITS_AMOUNT) {
+        if (!editText.getText().toString().equals("") && Long.parseLong(editText.getText().toString()) > CommonConstants.MAX_AMOUNT_VALUE ) {
             editText.setError("Down Payment too Large");
         } else {
             editText.setError(null);
@@ -82,8 +85,9 @@ public  class EMIHelper {
         if(isTenureInMonths) {
             validPeriod = validPeriod * 12;
         }
-
-        if (!editText.getText().toString().equals("") && Integer.parseInt(editText.getText().toString()) > validPeriod) {
+        if ((!editText.getText().toString().equals("") && Integer.parseInt(editText.getText().toString()) == 0 )) {
+            editText.setError("Invalid tenure period, cannot be zero");
+        } else if (!editText.getText().toString().equals("") && Integer.parseInt(editText.getText().toString()) > validPeriod) {
             editText.setError("Invalid tenure period, enter smaller period");
         } else {
             editText.setError(null);
@@ -92,7 +96,7 @@ public  class EMIHelper {
 
     public static String prettifyMessage(String alertMessage) {
         if(alertMessage.charAt(0) == ',') {
-            alertMessage = alertMessage.substring(1);
+            alertMessage = alertMessage.substring(2);
         }
         return alertMessage;
     }
