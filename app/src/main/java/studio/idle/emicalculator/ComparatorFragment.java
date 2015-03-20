@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.NumberFormat;
 
 import studio.idle.emicalculator.common.CommonConstants;
@@ -136,14 +137,14 @@ public class ComparatorFragment extends Fragment implements TextWatcher, View.On
 
     public void hideResultLayout() {
         comparatorView.findViewById(R.id.compareResultHeading).setVisibility(View.INVISIBLE);
-        comparatorView.findViewById(R.id.resultLayout).setVisibility(View.INVISIBLE);
+        comparatorView.findViewById(R.id.resultLayoutCompare).setVisibility(View.INVISIBLE);
         comparatorView.findViewById(R.id.resultFooter).setVisibility(View.INVISIBLE);
         comparatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.main_background_color);
     }
 
     public void showResultLayout() {
         comparatorView.findViewById(R.id.compareResultHeading).setVisibility(View.VISIBLE);
-        comparatorView.findViewById(R.id.resultLayout).setVisibility(View.VISIBLE);
+        comparatorView.findViewById(R.id.resultLayoutCompare).setVisibility(View.VISIBLE);
         comparatorView.findViewById(R.id.resultFooter).setVisibility(View.VISIBLE);
         comparatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.main_background_post_color);
     }
@@ -183,10 +184,10 @@ public class ComparatorFragment extends Fragment implements TextWatcher, View.On
             TextView monthlyInstallmentTV1 = (TextView) comparatorView.findViewById(R.id.monthlyInstallment1);
             TextView totalInterestTV1 = (TextView) comparatorView.findViewById(R.id.totalInterest1);
             TextView totalAmountTV1 = (TextView) comparatorView.findViewById(R.id.totalAmount1);
-            NumberFormat currencyFormatter = NumberFormat.getNumberInstance();
-            monthlyInstallmentTV1.setText(currencyFormatter.format(emiRounded1));
-            totalInterestTV1.setText(currencyFormatter.format(totalInterest1));
-            totalAmountTV1.setText(currencyFormatter.format(totalAmountPayable1));
+            Format indianCurrencyFormatter = new DecimalFormat("##,##,###");
+            monthlyInstallmentTV1.setText(indianCurrencyFormatter.format(emiRounded1));
+            totalInterestTV1.setText(indianCurrencyFormatter.format(totalInterest1));
+            totalAmountTV1.setText(indianCurrencyFormatter.format(totalAmountPayable1));
 
             //Loan2
             principalAmount2 = Long.parseLong(amountET2.getText().toString());
@@ -205,12 +206,12 @@ public class ComparatorFragment extends Fragment implements TextWatcher, View.On
             TextView monthlyInstallmentTV2 = (TextView) comparatorView.findViewById(R.id.monthlyInstallment2);
             TextView totalInterestTV2 = (TextView) comparatorView.findViewById(R.id.totalInterest2);
             TextView totalAmountTV2 = (TextView) comparatorView.findViewById(R.id.totalAmount2);
-            monthlyInstallmentTV2.setText(currencyFormatter.format(emiRounded2));
-            totalInterestTV2.setText(currencyFormatter.format(totalInterest2));
-            totalAmountTV2.setText(currencyFormatter.format(totalAmountPayable2));
+            monthlyInstallmentTV2.setText(indianCurrencyFormatter.format(emiRounded2));
+            totalInterestTV2.setText(indianCurrencyFormatter.format(totalInterest2));
+            totalAmountTV2.setText(indianCurrencyFormatter.format(totalAmountPayable2));
 
             TextView differenceInterest = (TextView) comparatorView.findViewById(R.id.differenceInterest);
-            differenceInterest.setText(currencyFormatter.format(Math.abs(totalInterest1 - totalInterest2)));
+            differenceInterest.setText(indianCurrencyFormatter.format(Math.abs(totalInterest1 - totalInterest2)));
             showResultLayout();
         } else {
             hideResultLayout();

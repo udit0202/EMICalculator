@@ -16,7 +16,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.NumberFormat;
+import java.util.Formatter;
 
 import studio.idle.emicalculator.common.CommonConstants;
 import studio.idle.emicalculator.common.EMIHelper;
@@ -63,10 +66,26 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         interestET.addTextChangedListener(this);
         downPaymentET.addTextChangedListener(this);
         tenureET.addTextChangedListener(this);
-
         return calculatorView;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v("UDit","Pause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("UDit","stop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.v("UDit","destroy");
+    }
     public void resetFields() {
         EMIHelper.resetFields(amountET, downPaymentET, tenureET, interestET);
         RadioButton b = (RadioButton) calculatorView.findViewById(R.id.tenure_months);
@@ -84,14 +103,14 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     }
 
     public void hideResultLayout() {
-        calculatorView.findViewById(R.id.resultLayout).setVisibility(View.INVISIBLE);
+        calculatorView.findViewById(R.id.resultLayoutCalculate).setVisibility(View.INVISIBLE);
         calculatorView.findViewById(R.id.resultHeading).setVisibility(View.INVISIBLE);
         calculatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.main_background_color);
     }
 
     public void showResultLayout() {
         calculatorView.findViewById(R.id.resultHeading).setVisibility(View.VISIBLE);
-        calculatorView.findViewById(R.id.resultLayout).setVisibility(View.VISIBLE);
+        calculatorView.findViewById(R.id.resultLayoutCalculate).setVisibility(View.VISIBLE);
         calculatorView.findViewById(R.id.mainLayout).setBackgroundResource(R.color.main_background_post_color);
     }
 
@@ -117,10 +136,10 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
             TextView totalInterestTV = (TextView) calculatorView.findViewById(R.id.totalInterest);
             TextView totalAmountTV = (TextView) calculatorView.findViewById(R.id.totalAmountPayable);
 
-            NumberFormat currencyFormatter = NumberFormat.getNumberInstance();
-            monthlyInstallmentTV.setText(currencyFormatter.format(emiRounded));
-            totalAmountTV.setText(currencyFormatter.format(totalAmountPayable));
-            totalInterestTV.setText(currencyFormatter.format(totalInterest));
+            Format indianCurrencyFormatter = new DecimalFormat("##,##,###");
+            monthlyInstallmentTV.setText(indianCurrencyFormatter.format(emiRounded));
+            totalAmountTV.setText(indianCurrencyFormatter.format(totalAmountPayable));
+            totalInterestTV.setText(indianCurrencyFormatter.format(totalInterest));
 
             showResultLayout();
         } else {

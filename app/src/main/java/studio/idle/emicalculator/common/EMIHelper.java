@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.NumberFormat;
 
 /**
@@ -22,13 +24,14 @@ public  class EMIHelper {
     }
 
     public static String constructShareText(Long principalAmount, float interestRate, Long downPayment, int tenure, boolean isTenureInMonths, Long emiRounded, Long totalInterest, Long totalAmountPayable) {
-        NumberFormat currencyFormatter = NumberFormat.getNumberInstance();
+        Format indianCurrencyFormatter = new DecimalFormat("##,##,###");
         String tenureType ;
         tenureType = isTenureInMonths ? "Months": "Years";
+        tenure = isTenureInMonths ? tenure: tenure/12;
         String shareText = "";
-        shareText += "Loan Amount :" + currencyFormatter.format(principalAmount - downPayment) + "\n" + "Interest Rate : " + interestRate + " %\n" + "Tenure : " + tenure + " " + tenureType + "\n\n";
+        shareText += "Loan Amount :" + indianCurrencyFormatter.format(principalAmount - downPayment) + "\n" + "Interest Rate : " + interestRate + " %\n" + "Tenure : " + tenure + " " + tenureType + "\n\n";
         shareText += "EMI Calculation: \n\n";
-        shareText += "EMI Amount: " + currencyFormatter.format(emiRounded)+ "\n" + "Total Interest Payable: " + currencyFormatter.format(totalInterest)+ "\n" + "Total Amount Payable: " + currencyFormatter.format(totalAmountPayable) + "\n\n";
+        shareText += "EMI Amount: " + indianCurrencyFormatter.format(emiRounded)+ "\n" + "Total Interest Payable: " + indianCurrencyFormatter.format(totalInterest)+ "\n" + "Total Amount Payable: " + indianCurrencyFormatter.format(totalAmountPayable) + "\n\n";
         return shareText;
     }
 
