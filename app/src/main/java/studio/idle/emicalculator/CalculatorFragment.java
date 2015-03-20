@@ -69,23 +69,6 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         return calculatorView;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.v("UDit","Pause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.v("UDit","stop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.v("UDit","destroy");
-    }
     public void resetFields() {
         EMIHelper.resetFields(amountET, downPaymentET, tenureET, interestET);
         RadioButton b = (RadioButton) calculatorView.findViewById(R.id.tenure_months);
